@@ -40,7 +40,7 @@ import re
 import pandas as pd
 
 
-def ScrapedRecipeNutrition(file):
+def GetNutrition(file):
     '''
     File should follow Naomi Goodnight's format (all comma-separated):
         Link
@@ -57,7 +57,6 @@ def ScrapedRecipeNutrition(file):
 
         for line in f:
             # If UnicodeDecodeError handling required, add try/raise block here
-            print(line) # KILL
 
             recipe = re.split(',\"|\",', line)
             recipe = [j.strip('"') for j in recipe] # Removes redundant parenthesis
@@ -69,22 +68,46 @@ def ScrapedRecipeNutrition(file):
             recipe[0] = recipe_title
             recipe[1] = recipe_link
 
-            print(recipe) # KILL
+            # Make dataframe consisting of all ingredients and nutrition data
+            column_names = ["Ingredients",
+                            "Weight",
+                            "Calories (kcal)",
+                            "Calories from Fat (kcal)",
+                            "Total Fat (g)",
+                            "Saturated Fat (g)",
+                            "Trans Fat (g)",
+                            "Cholesterol (mg)",
+                            "Sodium (mg)",
+                            "Total Carbohydrate (g)",
+                            "Dietary Fiber (g)",
+                            "Sugars (g)",
+                            "Protein (g)",
+                            "Vitamin A (% DV)",
+                            "Vitamin C (% DV)",
+                            "Calcium (% DV)",
+                            "Iron (% DV)"]
+
+            ingredients_df = pd.DataFrame(data=recipe)#, columns=column_names)
+
+            print(ingredients_df)
+
+
+
+
 
             i += 1 # KILL
-            if i == 1: # KILL
+            if i == 20: # KILL
                 break # KILL
 
-            # Make dataframe consisting of all ingredients and nutrition data
+
+
 
     # return ' ~~~ '.join(recipe) # KILL???
 
 
-# UnicodeDecodeError Handling
 
 
-
-print(ScrapedRecipeNutrition("recipe_output_new.csv.txt"))
+print(GetNutrition("recipe_output_new.csv"))
 
 
 ### CITATIONS ###
