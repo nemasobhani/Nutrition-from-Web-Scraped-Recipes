@@ -50,23 +50,27 @@ def GetNutrition(file):
     '''
 
     # Access scraped data
-    with open(file, encoding='cp437') as f:
+    with open(file, encoding='utf-8') as f:
         next(f)
 
         i = 0 # KILL
 
         for line in f:
-            # If UnicodeDecodeError handling required, add try/raise block here
+            # Error handling for UnicodeDecodeError and IndexError
+            try:
 
-            recipe = re.split(',\"|\",', line)
-            recipe = [j.strip('"') for j in recipe] # Removes redundant parenthesis
-            del recipe[-1] # Deletes newline
+                recipe = re.split(',\"|\",', line)
+                recipe = [j.strip('"') for j in recipe] # Removes redundant parenthesis
+                del recipe[-1] # Deletes newline
 
-            # Switching link and title position
-            recipe_link = recipe[0]
-            recipe_title = recipe[1]
-            recipe[0] = recipe_title
-            recipe[1] = recipe_link
+                # Switching link and title position
+                recipe_link = recipe[0]
+                recipe_title = recipe[1]
+                recipe[0] = recipe_title
+                recipe[1] = recipe_link
+
+            except:
+                continue
 
             # Make dataframe consisting of all ingredients and nutrition data
             column_names = ["Ingredients",
@@ -87,18 +91,17 @@ def GetNutrition(file):
                             "Calcium (% DV)",
                             "Iron (% DV)"]
 
-            ingredients_df = pd.DataFrame(data=recipe)#, columns=column_names)
+            # For each ingredient, figure out whether has quantity, weight, or none
 
+
+
+
+            ingredients_df = pd.DataFrame(data=recipe)#, columns=column_names)
             print(ingredients_df)
 
-
-
-
-
             i += 1 # KILL
-            if i == 20: # KILL
+            if i == 1: # KILL
                 break # KILL
-
 
 
 
