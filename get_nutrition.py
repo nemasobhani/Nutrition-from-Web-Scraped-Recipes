@@ -99,6 +99,10 @@ def GetNutrition(file):
             ingredients_df = pd.DataFrame(data=recipe)#, columns=column_names)
             print(ingredients_df)
 
+
+            print("GIT UPDATE")
+
+
             i += 1 # KILL
             if i == 1: # KILL
                 break # KILL
