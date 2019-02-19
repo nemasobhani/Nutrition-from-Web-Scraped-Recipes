@@ -102,6 +102,8 @@ def GetNutrition(file):
 
             print("GIT UPDATE")
 
+            hjgjhgjhgjghkjgh
+
 
             i += 1 # KILL
             if i == 1: # KILL
