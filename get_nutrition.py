@@ -51,18 +51,22 @@ def GetNutrition(file):
 
     # Access scraped data
     with open(file, encoding='utf-8') as f:
-        next(f)
+        for i in range(41002):# KILL
+            next(f) # KILL
 
-        i = 0 # KILL
+        z = 0 # KILL
 
         for line in f:
             # Error handling for UnicodeDecodeError and IndexError
             try:
 
-                recipe = re.split(',\"|\",', line)
+                print(line) # KILL
+                recipe = re.split(',\"|\",|[?<=\w],[?=\w]', line)
                 recipe = [j.strip('"') for j in recipe] # Removes redundant parenthesis
                 del recipe[-1] # Deletes newline
+                recipe = list(filter(None, recipe))
 
+                print(recipe) # KILL
                 # Switching link and title position
                 recipe_link = recipe[0]
                 recipe_title = recipe[1]
@@ -71,6 +75,42 @@ def GetNutrition(file):
 
             except:
                 continue
+
+            # Parse ingredients, figuring out whether has quantity, weight, or none
+            for ingredient in recipe[3:]:
+
+                ingredient_list = re.split(', | ', ingredient.lower())
+
+                if "g/" in ingredient_list[0] and 'kg/' not in ingredient_list[0]:
+                    grams = int(ingredient_list[0][0:ingredient_list[0].find('g/')])
+
+                if "kg/" in ingredient_list[0]:
+                    grams = int(ingredient_list[0][0:ingredient_list[0].find('kg/')])/1000
+
+                if "l/" in ingredient_list[0] and 'ml/' not in ingredient_list[0]:
+                    grams = int(ingredient_list[0][0:ingredient_list[0].find('l/')])/1000
+
+                if "ml/" in ingredient_list[0]:
+                    grams = int(ingredient_list[0][0:ingredient_list[0].find('ml/')])
+
+            #     if ('g/' in ingredient_list[0]
+            #         or "kg/" in ingredient_list[0]
+            #         or "l/" in ingredient_list[0]
+            #         or "ml/" in ingredient_list[0]):
+            #         print(ingredient_list)
+            #         print(grams)
+            #
+            #     print(ingredient)
+            # print(recipe)
+
+
+
+
+
+
+
+            # ingredients_df = pd.DataFrame(data=recipe)#, columns=column_names)
+
 
             # Make dataframe consisting of all ingredients and nutrition data
             column_names = ["Ingredients",
@@ -91,22 +131,11 @@ def GetNutrition(file):
                             "Calcium (% DV)",
                             "Iron (% DV)"]
 
-            # For each ingredient, figure out whether has quantity, weight, or none
 
 
 
-
-            ingredients_df = pd.DataFrame(data=recipe)#, columns=column_names)
-            print(ingredients_df)
-
-
-            print("GIT UPDATE")
-
-            hjgjhgjhgjghkjgh
-
-
-            i += 1 # KILL
-            if i == 1: # KILL
+            z += 1 # KILL
+            if z == 1: # KILL
                 break # KILL
 
 
