@@ -29,12 +29,11 @@ Vitamin C (% DV)
 Calcium (% DV)
 Iron (% DV)
 
-***All nutrition organized following fda.gov nutrition fac guidelines***
+***All nutrition organized following fda.gov nutritional facts guidelines***
 
 ***This is not exact! Many false assumptions are made to keep things simple!***
 Assumptions:
-    1 gram = 1 ml
-    All density = water
+    1 gram = 1 ml (all density = water)
     If no quantity or weight given, 50g used by default.
 '''
 
@@ -82,7 +81,7 @@ def GetNutrition(file):
 
                 print(line) # KILL
 
-                # Split on parenthesis and commas with no space around them
+                # Split on parenthesis and commas with no space after them
                 recipe = re.split(',\"|\",|,(?=\S)', line) # Use (?<=\S) before comma?
                 recipe = [i.strip('"') for i in recipe] # Removes redundant parenthesis
                 del recipe[-1] # Deletes newline
@@ -169,6 +168,11 @@ def GetNutrition(file):
 
                 # Get nutrition from USDA database
                 '''
+                ### TRUNCATE ###
+                1. Numeric
+                2. Measurements
+                3. Stop words
+
                 ### HOW TO MATCH INGREDIENTS TO USDA DATABASE ###
 
                 1. Highest number of matches in ingredient_list line
@@ -193,6 +197,9 @@ def GetNutrition(file):
                 ex.
                     if count > BestMatch[0] and length < BestMatch[1]:
                         BestMatch = [highercount, shorter food description, food ID]
+
+                FOOD_DESC
+
                 '''
 
 
