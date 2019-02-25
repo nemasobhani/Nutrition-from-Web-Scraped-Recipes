@@ -41,4 +41,4 @@ Data Transformation, Feature Engineering Complete | Feb 26th
 Statistical Summary and Visualization Complete |  Mar 8th  
 
 ## 4. Current Micro Next Steps
-Removing lines without ingredients
+Altering ingredient outliers
