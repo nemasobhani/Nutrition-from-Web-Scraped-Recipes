@@ -19,7 +19,7 @@ We are using the web scraper, "beautiful soup" (https://www.crummy.com/software/
 
 **Attributes**
 Typical USDA food descriptions look like this:
-~10123~^~1000~^~Pork, cured, bacon, unprepared~^~PORK,CURED,BACON,UNPREP~^~~^~~^~Y~^~~^0^~~^6.25^4.27^9.02^3.87
+\~10123\~^\~1000\~^\~Pork, cured, bacon, unprepared\~^\~PORK,CURED,BACON,UNPREP\~^\~\~^\~\~^\~Y\~^\~\~^0^\~\~^6.25^4.27^9.02^3.87
 
 The description will inform the data of the food and allows to locate information in the USDA nutrition data file (each three digit number indicates what type of nutritional data, such as Calories, Protein, Carbs, Fats, etc):
 ~10123~^~203~^12.62^18^0.247^~1~^~A~^~~^~~^1^10.50^14.70^14^12.093^13.150^~2, 3~^05/2012^
