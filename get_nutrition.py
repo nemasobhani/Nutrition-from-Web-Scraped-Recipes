@@ -70,7 +70,7 @@ def GetNutrition(file):
     with open(file, encoding='utf-8') as f:
 
         # I'm using this to jump around in the raw data file
-        for blah in range(10000):# KILL
+        for blah in range(100):# KILL
             next(f) # KILL
 
         z = 0 # KILL
@@ -158,7 +158,7 @@ def GetNutrition(file):
                     grams = float(ingredient_list[0][0:ingredient_list[0].find('ml/')])
 
                 # If quantity exists, convert to grams using measurement dict
-                if qty != None:
+                if qty != None and grams == None:
                     # Check for common units of measurement (UNIVERSAL)
                     for i in range(1,3): # Checking second and third indices
                         for key in measurement_keys:
@@ -166,7 +166,60 @@ def GetNutrition(file):
                                 grams = qty * measurement[key]
                                 break
 
+                # Truncate to remove numerics, measurements, and stop words
+                truncated = []
+                stop = ['a', 'the', 'or', 'of', 'if', 'on', 'but', 'good', ]
+
+                for i in ingredient_list:
+                    skip = False
+                    for j in i:
+                        if j.isdigit():
+                            skip = True
+                    for k in measurement_keys:
+                        if k in i:
+                            skip = True
+                    if i in stop:
+                        continue
+                    if skip == False:
+                        truncated.append(i)
+
                 # Get nutrition from USDA database
+                '''
+                Initialize list to keep track of:
+                    -counter
+                    -description length
+                    -food ID
+                Best match will be highest count in shortest description
+                '''
+                BestMatch = [0, float('inf'), None]
+
+                with open('USDA_Nutrition_DataSet/FOOD_DES.txt') as g:
+                    for line in g:
+                        USDA_desc = line.lower().split('~^~')
+
+                        CurrentMatch = [0, float('inf'), None]
+                        # Check if words in ingredient are in USDA database
+                        for i in truncated:
+                            if i in USDA_desc[2]:
+                                CurrentMatch[0] += 1
+
+                        # If count is >= best, add rest of information
+                        if CurrentMatch[0] >= BestMatch[0]:
+                            CurrentMatch[1] = len(USDA_desc[2])
+                            CurrentMatch[2] = USDA_desc[0][1:]
+
+                        # If count is higher and ref length is shorter, update best
+                        if (CurrentMatch[0] >= 1 and
+                            CurrentMatch[0] >= BestMatch[0] and
+                            CurrentMatch[1] <= BestMatch[1]):
+
+                            BestMatch = CurrentMatch
+
+                            print(truncated, USDA_desc[:3], BestMatch)
+                    # print(truncated, grams, qty, BestMatch, USDA_desc[:3])
+
+
+
                 '''
                 ### TRUNCATE ###
                 1. Numeric
@@ -203,7 +256,7 @@ def GetNutrition(file):
                 '''
 
 
-                print(ingredient_list, grams, qty)
+                # print(ingredient_list, truncated, grams, qty)
 
             print(recipe)
 
