@@ -19,7 +19,7 @@
 #awk 'FNR==NR{a[$0]++}FNR!=NR && !a[$0]{print}' 'long29.csv' 'recipe_output_new.csv'
 #Check
 #awk -F',' '$1~/joyofkosher/' recipe_output_wo_longjoy.csv> didiwork.csv
-#awk -F"," '$1 != "http://www.joyofkosher.com/recipes/fresh-tuna-nicoise-salad/" {print $0 }' 'recipe_output_new.csv' > 'recipe_temp.csv'
+#awk -F"," '$1 != "http://www.joyofkosher.com/recipes/fresh-tuna-nicoise-salad/" {print $0 }' 'recipe_temp.csv' > 'recipe_output_new.csv'
 #awk -F"," '$1 == "http://foodnetwork.com/recipes/rebuilt-louisiana-seafood-platter-recipe3-1965535" {print $0 }' 'recipe_output_new.csv' > 'recipe_temp.csv'
 
 import pandas as pd
@@ -40,9 +40,9 @@ def dupes():
     dupes = df.drop_duplicates()
     dupes.to_csv(path_or_buf = f'recipe_temp.csv')
     #Remove the first row(weird column names), Put our header back on top, Remove the first column
-    # awk 'NR>1 {print$0}' recipe_temp.csv>recipe_temp_temp.csv
+    # awk 'NR>1 {print$0}' recipe_temp.csv>recipe_output_new.csv
     # cat header.csv recipe_temp_temp.csv >recipe_temp.csv
-    # awk -F',' '{print substr($0, index($0, $2))}' recipe_temp.csv > recipe_output_new.csv
+    # awk -F',' '{print substr($0, index($0, $2))}' recipe_output_new.csv > recipe_temp.csv
 
 
 
