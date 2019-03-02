@@ -19,15 +19,63 @@
 #awk 'FNR==NR{a[$0]++}FNR!=NR && !a[$0]{print}' 'long29.csv' 'recipe_output_new.csv'
 #Check
 #awk -F',' '$1~/joyofkosher/' recipe_output_wo_longjoy.csv> didiwork.csv
+#awk -F"," '$1 != "http://www.joyofkosher.com/recipes/fresh-tuna-nicoise-salad/" {print $0 }' 'recipe_output_new.csv' > 'recipe_temp.csv'
+#awk -F"," '$1 == "http://foodnetwork.com/recipes/rebuilt-louisiana-seafood-platter-recipe3-1965535" {print $0 }' 'recipe_output_new.csv' > 'recipe_temp.csv'
 
-
-#Find extra long ingredients
 import pandas as pd
 
 
-df = pd.read_csv('recipe_output_new.csv', names = range(100), sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False)
+df = pd.read_csv('recipe_output_new.csv', names = range(155), sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False, dtype=object)
 
-#Finds and prints recipes with ingredients containing more than 30 spaces
-for i in range(80,100):
-    mask = (df[i].str.count(" ") > 1)
-    df.loc[mask].to_csv(path_or_buf = f'long{i}.csv')
+# #Finds and prints recipes with ingredients containing more than 30 spaces
+# # for i in range(155):
+# #     mask = (df[i].str.count(" ") > 30)
+# #     df.loc[mask].to_csv(path_or_buf = f'long{i}.csv')
+#
+def dupes():
+    '''Remove duplicate rows'''
+    dupes = df[df.duplicated(keep=False)]
+    print(len(dupes))#4866
+    dupes.to_csv(path_or_buf = f'recipe_dupes.csv')
+    dupes = df.drop_duplicates()
+    dupes.to_csv(path_or_buf = f'recipe_temp.csv')
+    #Remove the weird column names, Put our header back on top, Remove the first column
+    # awk 'NR>1 {print$0}' recipe_temp.csv>recipe_temp_temp.csv
+    # cat header.csv recipe_temp_temp.csv >recipe_temp.csv
+    # awk '{print substr($0, index($0, $2))}' recipe_temp.csv > recipe_temp_temp.csv
+
+
+
+def repeat_ingredients():
+    '''For recipes with more than 50 ingredients, finds recipes with repeat ingredients'''
+    mask = (df.count(axis=1) > 50)
+    mass = df.loc[mask]
+    print(f'The number of recipes to investigate are {len(mass)}')
+
+    for i in range(len(mass)):
+        ingset = set()
+        rec_list = list(mass.iloc[i,0:3])
+        #print(f'The head is {rec_list}')
+        ing_count = mass.iloc[i].count()
+        #print(f'Starting with {ing_count} ingredients')
+        for j in range(3,155):
+            ingset.update([mass.iloc[i,j]])
+        uniq_ing_count = len(ingset)
+        # print(f'My set has {uniq_ing_count} ingredients')
+        rec_list = rec_list + list(ingset) + ["" for i in range (len(ingset)+3,155)]
+        #print(f'My list has {len(rec_list)} elements')
+        #print(f'My collected list is {rec_list}')
+        #print(f'I will remove {len(df[df[0] == rec_list[0]])} rows from the master df')
+        mask2 = (df[0] == rec_list[0])
+        #print(f'The length of the master df is {len(df)}')
+        if (ing_count/uniq_ing_count) > 1.5:
+            df.drop(df[mask2].index, inplace = True)
+            df.loc[len(df)] = rec_list
+            print(f'The length of the master df is {len(df)}')
+            print(f'I reduced ingredients from {ing_count} to {uniq_ing_count} in {mass.iloc[i,0:1]}')
+
+    mask = (df.count(axis=1) > 50)
+    mass = df.loc[mask]
+    print(f'The number of recipes to investigate are {len(mass)}')
+    df.to_csv(path_or_buf = f'recipe_temp.csv')
+dupes()
