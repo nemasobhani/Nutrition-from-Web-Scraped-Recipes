@@ -17,13 +17,16 @@ We are using the web scraper, "beautiful soup" (https://www.crummy.com/software/
 
 ## 2. Data Set Attributes (Nema Sobhani)
 
-Attributes
-- Item
-  - Corn, Milk, Chicken
-- Calories
-  - 250, 1000
-- Protein
-  - 10, 20
+**Attributes**  
+Typical USDA food descriptions look like this:  
+  
+\~10123\~^\~1000\~^\~Pork,cured,bacon,unprepared\~^\~PORK,CURED,BACON,UNPREP\~^\~\~^\~\~^\~Y\~^\~\~^0^\~\~^6.25^4.27^9.02^3.87
+  
+The description will inform the data of the food and allows to locate information in the USDA nutrition data file (each three digit number indicates what type of nutritional data, such as Calories, Protein, Carbs, Fats, etc):  
+  
+\~10123\~^\~203\~^12.62^18^0.247^\~1\~^\~A\~^\~\~^\~\~^1^10.50^14.70^14^12.093^13.150^\~2, 3\~^05/2012^  
+\~10123\~^\~204\~^39.69^18^1.165^\~1\~^\~A\~^\~\~^\~\~^1^32.60^49.20^13^37.172^42.206^\~2, 3\~^05/2012^  
+\~10123\~^\~205\~^1.28^0^^\~4\~^\~NC\~^\~\~^\~\~^^^^^^^\~\~^05/2012^ ...and so on...  
 
 *Noise*: Each item has multiple different versions. For example, corn may be raw, on the cob, canned. These will have to be parsed carefully to yield the correct item. Another form of noise is that weights may vary, as well as percentage of daily value, all of which will have to be normalized.
 
