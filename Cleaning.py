@@ -23,22 +23,24 @@
 #awk -F"," '$1 == "http://foodnetwork.com/recipes/rebuilt-louisiana-seafood-platter-recipe3-1965535" {print $0 }' 'recipe_output_new.csv' > 'recipe_temp.csv'
 
 import pandas as pd
+import re
 
-
-df = pd.read_csv('recipe_output_new.csv', names = range(155), sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False, dtype=object)
+df = pd.read_csv('recipe_output_new.csv', names = range(80), sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False, dtype=object)
+# df.to_csv(path_or_buf = f'recipe_temp.csv', header = False)#, index = False)
+# print(max(df.count(axis=1)))#.to_csv(path_or_buf = f'recipe_ing_count.csv', header = True)
 
 # #Finds and prints recipes with ingredients containing more than 30 spaces
-# # for i in range(155):
-# #     mask = (df[i].str.count(" ") > 30)
-# #     df.loc[mask].to_csv(path_or_buf = f'long{i}.csv')
+# for i in range(155):
+#     mask = (df[i].str.count(" ") > 30)
+#     df.loc[mask].to_csv(path_or_buf = f'long{i}.csv')
 #
 def dupes():
     '''Remove duplicate rows'''
     dupes = df[df.duplicated(keep=False)]
     print(len(dupes))#4866
-    dupes.to_csv(path_or_buf = f'recipe_dupes.csv')
+    dupes.to_csv(path_or_buf = f'recipe_dupes.csv')#, header = False
     dupes = df.drop_duplicates()
-    dupes.to_csv(path_or_buf = f'recipe_temp.csv')
+    dupes.to_csv(path_or_buf = f'recipe_temp.csv')#, header = False
     #Remove the first row(weird column names), Put our header back on top, Remove the first column
     # awk 'NR>1 {print$0}' recipe_temp.csv>recipe_output_new.csv
     # cat header.csv recipe_temp_temp.csv >recipe_temp.csv
@@ -78,4 +80,21 @@ def repeat_ingredients():
     mass = df.loc[mask]
     print(f'The number of recipes to investigate are {len(mass)}')
     df.to_csv(path_or_buf = f'recipe_temp.csv')
-repeat_ingredients()
+    #Remove excess commas
+    # awk '{print substr($0, 1, length($0)-75)}' recipe_temp.csv > recipe_output_new.csv
+word_count = {}
+with open('recipe_output_new.csv') as f:
+    for line in f:
+        line = line.lower()
+        for w in re.findall(r"[\w']+", line, re.IGNORECASE):
+            if w in word_count:
+                word_count[w] += 1
+            else:
+                word_count[w] = 1
+# print(word_count)
+wc_sorted = sorted(word_count.items(), key=lambda kv: kv[1])
+wc_sorted2 = []
+for i in range(len(wc_sorted)):
+    if int(wc_sorted[i][1]) > 1000:
+        wc_sorted2.append(wc_sorted[i])
+print(wc_sorted2)

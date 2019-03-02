@@ -169,7 +169,7 @@ def GetNutrition(file):
     with open(file, encoding='utf-8') as f:
 
         # I'm using this to jump around in the raw data file
-        for blah in range(15000):# KILL
+        for blah in range(15340):# KILL
             next(f) # KILL
 
         z = 0 # KILL
@@ -280,12 +280,16 @@ def GetNutrition(file):
 
                 # Truncate to remove numerics, measurements, and stop words
                 truncated = []
-                stop = (['a', 'and', 'the', 'or', 'of', 'if', 'on', 'but',
-                        'pinch', 'left', 'peeled', 'cut', 'chopped', 'sliced',
-                        'small', 'medium', 'large', 'whole', 'into', 'in', 'to',
-                        'plus', 'more', 'thick', 'halved', 'quartered', 'good',
-                        'inch', 'inches', 'about', 'sea', 'end', 'approximate',
-                        'approximately'])
+                stop = (['a', 'about', 'all', 'and', 'approximate',
+                'approximately', 'as', 'at', 'but', 'chopped',
+                'coarsely', 'crushed', 'cubes', 'cut', 'diced',
+                'divided', 'each', 'end', 'fine', 'finely', 'for', 'from',
+                'good', 'grated', 'halved', 'if', 'in', 'inch', 'inches',
+                'into', 'large', 'left', 'medium', 'melted', 'minced', 'more',
+                'of', 'on', 'optional', 'or', 'peeled', 'pieces', 'pinch',
+                'plus', 'preferably', 'quartered', 'removed', 'sea', 'shredded',
+                'sliced', 'small', 'such', 'taste', 'the', 'thick', 'thinly',
+                'to', 'toasted', 'use', 'whole', 'with'])
 
                 for i in INGREDIENT:
                     skip = False
@@ -345,6 +349,7 @@ def GetNutrition(file):
 
                 with open('USDA_Nutrition_DataSet/FOOD_DES.txt') as g:
                     for line in g:
+                        # print(line)
                         USDA_desc = line.lower().split('~^~')
 
                         # If food group identified, only search there
