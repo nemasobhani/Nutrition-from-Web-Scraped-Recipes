@@ -39,10 +39,10 @@ def dupes():
     dupes.to_csv(path_or_buf = f'recipe_dupes.csv')
     dupes = df.drop_duplicates()
     dupes.to_csv(path_or_buf = f'recipe_temp.csv')
-    #Remove the weird column names, Put our header back on top, Remove the first column
+    #Remove the first row(weird column names), Put our header back on top, Remove the first column
     # awk 'NR>1 {print$0}' recipe_temp.csv>recipe_temp_temp.csv
     # cat header.csv recipe_temp_temp.csv >recipe_temp.csv
-    # awk '{print substr($0, index($0, $2))}' recipe_temp.csv > recipe_temp_temp.csv
+    # awk -F',' '{print substr($0, index($0, $2))}' recipe_temp.csv > recipe_output_new.csv
 
 
 
@@ -78,4 +78,4 @@ def repeat_ingredients():
     mass = df.loc[mask]
     print(f'The number of recipes to investigate are {len(mass)}')
     df.to_csv(path_or_buf = f'recipe_temp.csv')
-dupes()
+repeat_ingredients()
