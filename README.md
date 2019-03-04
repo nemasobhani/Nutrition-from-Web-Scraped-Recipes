@@ -44,14 +44,12 @@ Data Transformation, Feature Engineering Complete | Feb 26th
 Statistical Summary and Visualization Complete |  Mar 8th  
 
 ## 4. Current Micro Next Steps
-Goals:  
-    -Altering ingredient outliers
-    -Assign default food group factors
-    -Break up code
-        ~All predefined variables
-        ~Independent functions
-
-    -Analysis approach
-    -Visualization
-    -Write-up
-    -Jupyter Notebook
+    - Altering ingredient outliers  
+    - Assign default food group factors  
+    - Break up code  
+        - All predefined variables  
+        - Independent functions  
+    - Analysis approach  
+    - Visualization  
+    - Write-up  
+    - Jupyter Notebook  
