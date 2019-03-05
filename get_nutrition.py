@@ -41,7 +41,7 @@ Assumptions:
 # Import Statements
 import re
 import pandas as pd
-
+from get_nutrition_vars import *
 
 def GetNutrition(file):
     '''
@@ -52,164 +52,16 @@ def GetNutrition(file):
         Ingredients
     '''
 
-    # Using USDA FD_GROUP IDs, create dict of common items to shorten search later
-    FoodGroupID = ({'0100': {'butter', 'cheese', 'cream', 'milk', 'yogurt',
-                            'egg', 'eggs'},
-
-                    '0200': {'vinegar', 'allspice', 'anise', 'bay', 'caraway',
-                            'cardamom', 'cinnamon', 'cloves',
-                            'corriander', 'cumin', 'curry', 'fenugreek',
-                            'marjoram', 'nutmeg', 'oregano', 'rosemary',
-                            'tarragon', 'tumeric', 'dill', 'salt'},
-
-                    '0400': {'oil', 'margarine', 'shortening', 'mayonnaise'},
-
-                    '0500': {'chicken', 'duck', 'gooose', 'pheasant', 'quail',
-                            'squab', 'turkey', 'emu', 'ostrich'},
-
-                    '0600': {'soup', 'sauce', 'gravy', 'broth', 'stock'},
-
-                    '0700': {'sausage', 'bologna', 'bratwurst', 'chorizo',
-                            'frankfurter', 'mortadella', 'pastrami', 'pate',
-                            'pepperoni', 'salami', 'kielbasa', 'beerwurst',
-                            'pancetta'},
-
-                    '0800': {'cereal'},
-
-                    '0900': {'apples', 'apricots', 'avocado', 'avocados',
-                            'bananas', 'blackberries', 'cherries', 'blueberries',
-                            'boysenberries', 'cranberries', 'currants', 'dates',
-                            'elderberries', 'figs', 'gooseberries', 'goji',
-                            'grapefruit', 'grapes', 'guavas', 'jackfruit',
-                            'kiwis', 'kumquats', 'lemon', 'lime', 'limes',
-                            'mangos', 'cantaloupe', 'honeydew', 'mulberries',
-                            'nectarines', 'olives', 'oranges', 'tangerines',
-                            'papaya', 'papayas', 'passion-fruit', 'peaches',
-                            'pears', 'persimmons', 'pineapple', 'plantains',
-                            'plums', 'pomegranates', 'prunes', 'quince',
-                            'quinces', 'raisins', 'raspberries', 'rhubarb',
-                            'strawberries', 'durian', 'clementines', 'nectar'},
-
-                    '1000': {'bacon'},
-
-                    '1100': {'artichoke', 'artichokes', 'bamboo', 'beets', 'bell',
-                            'broccoli', 'brussel', 'brussels', 'cabbage',
-                            'carrot', 'carrots', 'celeriac', 'celery', 'chard',
-                            'chicory', 'chives', 'collard', 'corn', 'cucumber',
-                            'cucumbers', 'eggplant', 'eggplants', 'edamame',
-                            'garlic', 'kale', 'mushroom', 'mushrooms', 'leek',
-                            'leeks', 'lettuce', 'spinach', 'okra', 'onions',
-                            'parsnips', 'peas', 'peppers', 'potatoes', 'pumpkin',
-                            'radishes', 'rutabagas', 'sauerkraut', 'seaweed',
-                            'shallot', 'shallots', 'soybeans', 'squash',
-                            'succotash', 'taro', 'tomato', 'tomatoes', 'turnip',
-                            'turnips', 'watercress', 'yams','pickles', 'arugula',
-                            'cauliflower', 'asparagus', 'zucchini', 'zucchinis',
-                            'cilantro', 'jalapeno', 'jalapeño', 'scallion',
-                            'scallions'},
-
-                    '1200': {'seeds', 'nuts', 'almonds', 'brazilnuts', 'cashews',
-                            'chestnuts', 'coconut', 'macadamia', 'pecans', 'pine',
-                            'pistachios', 'walnuts'},
-
-                    '1300': {'beef', 'brisket'},
-
-                    '1400': {'water', 'alcoholic', 'liquor', 'liqueur', 'beer',
-                            'daiquiri', 'tea', 'coffee', 'lemonade', 'wine'},
-
-                    '1500': {'anchovy', 'anchovies', 'bass', 'carp', 'caviar',
-                            'cod', 'catfish', 'mahimahi', 'eel', 'grouper',
-                            'haddock', 'halibut', 'herring', 'mackerel',
-                            'monkfish', 'mullet', 'perch', 'pike', 'pollock',
-                            'rockfish', 'roe', 'roughy', 'salmon', 'sardine',
-                            'sardines', 'trout', 'smelt', 'snapper', 'sturgeon',
-                            'swordfish', 'tuna', 'whitefish', 'crab', 'crabs',
-                            'crayfish', 'lobster', 'lobsters', 'shrimp',
-                            'abalone', 'clam', 'clams', 'mussels', 'octopus',
-                            'osyters', 'scallops', 'squid', 'tilapia'},
-
-                    '1600': {'fava', 'chickpeas', 'lima', 'mung', 'peanut',
-                            'peanuts', 'miso', 'natto', 'tempeh', 'soy', 'tofu',
-                            'hummus', 'soymilk', 'navy', 'pinto'},
-
-                    '1700': {'lamb', 'veal', 'bison', 'boar', 'deer', 'elk',
-                            'moose', 'rabbit'},
-
-                    '1800': {'bread', 'cornbread', 'pumperknickle', 'bagels',
-                            'cookies', 'crackers', 'croissants', 'croutons',
-                            'doughnuts', 'muffins', 'toast', 'pancakes', 'pie',
-                            'baking', 'tortillas'},
-
-                    '1900': {'pudding', 'gelatin', 'flan', 'candy', 'frosting',
-                            'molasses', 'sugar', 'syrup', 'jam', 'preserve',
-                            'popcorn'},
-
-                    '2000': {'barley', 'buckwheat', 'grain', 'cornmeal',
-                            'couscous', 'hominy', 'millet', 'rice', 'semolina',
-                            'pasta', 'noodles', 'quinoa', 'sorghum'}
-                    })
-
-    # Factor to determine grams for 1 serving of item from food group compared to 100g default
-    FoodGroupFactor = ({'0100':1, '0200':1, '0300':1, '0400':1, '0500':1,
-                        '0600':1, '0700':1, '0800':1, '0900':1, '1000':1,
-                        '1100':1, '1200':1, '1300':1, '1400':1, '1500':1,
-                        '1600':1, '1700':1, '1800':1, '1900':1, '2000':1,
-                        '2100':1, '2200':1, '2500':1, None:1})
-
-    # Stop words to ignore when parsing individual ingredients
-    stop = (['a', 'and', 'the', 'or', 'of', 'if', 'on', 'but',
-            'pinch', 'left', 'peeled', 'cut', 'chopped', 'sliced',
-            'small', 'medium', 'large', 'whole', 'into', 'in', 'to',
-            'plus', 'more', 'thick', 'halved', 'quartered', 'good',
-            'inch', 'inches', 'about', 'sea', 'end', 'approximate',
-            'approximately', 'very', 'finely', 'for'])
-
-    # Create dictionary storing all possible measurements and conversion to grams
-    measurement = ({'teaspoon':5, 'tsp':5, 'tablespoon':15, 'tbsp':15,
-                    'ounce':28, 'oz':28, 'cup':250, 'pint':500, 'pt':500,
-                    'quart':1000, 'qt':1000, 'gallon':4000, 'gal':4000,
-                    'pound':453.592, 'lb':453.592, 'gram':1, 'kilogram':1000,
-                    'milliliter':1, 'liter':1000})
-    measurement_keys = list(measurement.keys())
-
-    # Create dictionary to handle fractions and fractional unicode
-    fractional = ({'1/2':str(1/2), '1/3':str(1/3), '2/3':str(2/3), '1/4':str(1/4),
-                    '3/4':str(3/4), '1/8':str(1/8), '½':str(1/2), '⅓':str(1/3),
-                    '⅔':str(2/3), '¼':str(1/4), '¾':str(3/4), '⅛':str(1/8)})
-    fractional_keys = list(fractional.keys())
-
     # Initialize dataframe consisting of all ingredients and nutrition data
-    column_names = ["Recipe",
-                    "Link",
-                    "Time (min)",
-                    "Ingredient",
-                    "Calories (kcal)",
-                    "Total Fat (g)",
-                    "Saturated Fat (g)",
-                    "Trans Fat (g)",
-                    "Cholesterol (mg)",
-                    "Sodium (mg)",
-                    "Total Carbohydrate (g)",
-                    "Dietary Fiber (g)",
-                    "Sugars (g)",
-                    "Protein (g)",
-                    "Vitamin A (% DV)",
-                    "Vitamin C (% DV)",
-                    "Calcium (% DV)",
-                    "Iron (% DV)"]
-
     ingredients_df = pd.DataFrame(columns=column_names)
-
-
 
     # Access scraped data
     with open(file, encoding='utf-8') as f:
 
         # I'm using this to jump around in the raw data file
-        for blah in range(10013):# KILL
-            next(f) # KILL
-
-        z = 0 # KILL
+        for blah in range(10013):
+            next(f)
+        z = 0
 
         for line in f:
             # Error handling for UnicodeDecodeError and IndexError
@@ -266,7 +118,6 @@ def GetNutrition(file):
                                 break
                 except:
                     pass
-
 
 
                 # Establish quantity
@@ -337,6 +188,7 @@ def GetNutrition(file):
                     if skip == False:
                         truncated.append(i)
 
+
                 # Find food group if applicable
                 FoodGroup = None
 
@@ -363,7 +215,6 @@ def GetNutrition(file):
                         continue
                     if exit == True:
                         break
-
 
 
                 # Get nutrition from USDA database
@@ -553,20 +404,22 @@ def GetNutrition(file):
 
                         ingredients_df.loc[len(ingredients_df)] = nutr_data
 
-
-            z += 1 # KILL
+            # Iteration control to select small subset
+            z += 1
             print('Getting nutrition for recipe: ', z)
-            if z == 20: # KILL
-                break # KILL
+            if z == 20:
+                break
 
     return ingredients_df
 
 # print(GetNutrition("recipe_output_new.csv"))
-GetNutrition("recipe_output_new.csv").to_csv('get_nutrition_01.csv', index=False)
+# GetNutrition("recipe_output_new.csv").to_csv('get_nutrition_01.csv', index=False)
+GetNutrition("recipe_output_new.csv").to_pickle('get_nutrition_01.pkl')
 
 
 ### NOTES ###
 # See GitHub repository (linked in line 3) for all discussion, analysis, and visualization.
+
 
 ### CITATIONS ###
 # https://www.ars.usda.gov/northeast-area/beltsville-md-bhnrc/beltsville-human-nutrition-research-center/nutrient-data-laboratory/docs/sr28-download-files/
