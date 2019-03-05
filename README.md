@@ -45,9 +45,7 @@ Statistical Summary and Visualization Complete |  Mar 8th
 
 ## 4. Current Micro Next Steps
 - Altering ingredient outliers  
-- ~~Assign default food group factors  ~~
 - Break up code  
-    - ~~All predefined variables  ~~
     - Independent functions  
 - Analysis approach  
 - Visualization  
