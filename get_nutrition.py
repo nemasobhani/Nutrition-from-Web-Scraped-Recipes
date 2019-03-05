@@ -412,9 +412,11 @@ def GetNutrition(file):
 
     return ingredients_df
 
-# print(GetNutrition("recipe_output_new.csv"))
-# GetNutrition("recipe_output_new.csv").to_csv('get_nutrition_01.csv', index=False)
-GetNutrition("recipe_output_new.csv").to_pickle('get_nutrition_01.pkl')
+# Running main code and storing in .csv, .txt, and .pkl
+ingredients_df = GetNutrition("recipe_output_new.csv")
+ingredients_df.to_csv('get_nutrition_01.csv', index=False)
+ingredients_df.to_csv('get_nutrition_01.txt', index=False)
+ingredients_df.to_pickle('get_nutrition_01.pkl')
 
 
 ### NOTES ###
