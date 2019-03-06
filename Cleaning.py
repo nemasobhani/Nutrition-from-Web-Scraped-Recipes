@@ -25,7 +25,7 @@
 import pandas as pd
 import re
 
-df = pd.read_csv('recipe_output_new.csv', names = range(155), sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False, dtype=object)
+df = pd.read_csv('recipe_output_new.csv', names = range(80), sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False, dtype=object)
 # df.to_csv(path_or_buf = f'recipe_temp.csv', header = False)#, index = False)
 # print(max(df.count(axis=1)))#.to_csv(path_or_buf = f'recipe_ing_count.csv', header = True)
 
@@ -38,8 +38,8 @@ df = pd.read_csv('recipe_output_new.csv', names = range(155), sep = ",", quotech
 #     df.loc[mask,i].to_csv(path_or_buf = f'parenthesis{i}.csv')
     #cat parenthesis3.csv parenthesis4.csv parenthesis5.csv parenthesis6.csv parenthesis7.csv parenthesis8.csv parenthesis9.csv parenthesis10.csv parenthesis11.csv parenthesis12.csv parenthesis13.csv parenthesis14.csv parenthesis15.csv parenthesis16.csv parenthesis17.csv parenthesis18.csv parenthesis19.csv parenthesis20.csv parenthesis21.csv parenthesis22.csv parenthesis23.csv parenthesis24.csv parenthesis25.csv parenthesis26.csv parenthesis27.csv parenthesis28.csv parenthesis29.csv parenthesis30.csv parenthesis31.csv parenthesis32.csv parenthesis33.csv parenthesis34.csv parenthesis35.csv parenthesis36.csv parenthesis37.csv parenthesis38.csv parenthesis39.csv parenthesis40.csv parenthesis41.csv parenthesis42.csv parenthesis43.csv parenthesis44.csv parenthesis45.csv parenthesis46.csv parenthesis47.csv > parenthesis.csv
 for i in range(2,80):
-    df.loc[i].str.replace(pat=r"\(([^\)]+)\),", repl=',', n=-1, case=None, flags=re.IGNORECASE, regex=True)
-    print(df.loc[i])
+    df.loc[:,i] = df.loc[:,i].str.replace(pat=r"\([^\)]+\)", repl=',', n=-1, case=None, flags=re.IGNORECASE, regex=True)
+    # print(df.loc[i])
 df.to_csv(path_or_buf = f'recipe_noparens.csv', header = False, index = False)
 # for i in range(2,80):
 #     df[df[i].str.contains("Instructions")==True].to_csv(path_or_buf = f'instruct{i}.csv')
@@ -91,7 +91,7 @@ def repeat_ingredients():
 
     mask = (df.count(axis=1) > 50)
     mass = df.loc[mask]
-    print(f'The number of remaining recipes to investigate are {len(mass)}')
+    print(f'The number of remaining recipes to investigate are {len(mass)}') #32
     df.to_csv(path_or_buf = f'recipe_temp.csv', header = False, index = False)
     #Remove excess commas
     # awk '{print substr($0, 1, length($0)-75)}' recipe_temp.csv > recipe_output_new.csv
@@ -113,5 +113,5 @@ def freq():
         if int(wc_sorted[i][1]) > 1000:
             wc_sorted2.append(wc_sorted[i])
     print(wc_sorted2)
-#dupes() remove duplicate rows
-#repeat_ingredients() remove repeated ingredients
+# dupes() #remove duplicate rows
+# repeat_ingredients() #remove repeated ingredients
