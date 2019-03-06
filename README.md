@@ -1,6 +1,6 @@
 # Nutrition-from-Web-Scraped-Recipes
 
-We are using the web scraper, "beautiful soup" (https://www.crummy.com/software/BeautifulSoup/), to pull all recipes from a multitude of food websites, followed by the scraping of those individual sites using an established package from github (https://github.com/hhursev/recipe-scrapers). We will analyze the nutritional content (from the USDA) of recipes found on a large dataset of online recipes and give comparisons accordingly.
+We are using the web scraper, [beautiful soup](https://www.crummy.com/software/BeautifulSoup/), to pull all recipes from a multitude of food websites, followed by the scraping of those individual sites using an established package from [github] (https://github.com/hhursev/recipe-scrapers). We will analyze the nutritional content (from the USDA) of recipes found on a large dataset of online recipes and give comparisons accordingly.
 
 ##### Contribution from Nema Sobhani:
 
@@ -12,18 +12,18 @@ We are using the web scraper, "beautiful soup" (https://www.crummy.com/software/
 - Naomi Goodnight
 
 **Objective**
-We are using the web scraper, "beautiful soup" (https://www.crummy.com/software/BeautifulSoup/), to pull all recipes from a multitude of food websites, followed by the scraping of those individual sites using an established package from github (https://github.com/hhursev/recipe-scrapers). We will analyze the nutritional content (from the USDA) of recipes found on a large dataset of online recipes and give comparisons accordingly.
+We are using the web scraper, [beautiful soup] (https://www.crummy.com/software/BeautifulSoup/), to pull all recipes from a multitude of food websites, followed by the scraping of those individual sites using an established package from [github] (https://github.com/hhursev/recipe-scrapers). We will analyze the nutritional content (from the USDA) of recipes found on a large dataset of online recipes and give comparisons accordingly.
 
 
 ## 2. Data Set Attributes (Nema Sobhani)
 
 **Attributes**  
 Typical USDA food descriptions look like this:  
-  
+
 \~10123\~^\~1000\~^\~Pork,cured,bacon,unprepared\~^\~PORK,CURED,BACON,UNPREP\~^\~\~^\~\~^\~Y\~^\~\~^0^\~\~^6.25^4.27^9.02^3.87
-  
+
 The description will inform the data of the food and allows to locate information in the USDA nutrition data file (each three digit number indicates what type of nutritional data, such as Calories, Protein, Carbs, Fats, etc):  
-  
+
 \~10123\~^\~203\~^12.62^18^0.247^\~1\~^\~A\~^\~\~^\~\~^1^10.50^14.70^14^12.093^13.150^\~2, 3\~^05/2012^  
 \~10123\~^\~204\~^39.69^18^1.165^\~1\~^\~A\~^\~\~^\~\~^1^32.60^49.20^13^37.172^42.206^\~2, 3\~^05/2012^  
 \~10123\~^\~205\~^1.28^0^^\~4\~^\~NC\~^\~\~^\~\~^^^^^^^\~\~^05/2012^ ...and so on...  
