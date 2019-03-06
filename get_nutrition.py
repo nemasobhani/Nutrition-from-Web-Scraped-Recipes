@@ -58,16 +58,18 @@ def GetNutrition(file):
     # Access scraped data
     with open(file, encoding='utf-8') as f:
 
-        # I'm using this to jump around in the raw data file
-        for blah in range(10013):
+        # I'm using this to skip title index
+        for skip in range(1):
             next(f)
-        z = 0
+        z = 1
+
 
         for line in f:
             # Error handling for UnicodeDecodeError and IndexError
             try:
 
-                # print(line) # KILL
+                # print(line)
+                print('Getting nutrition for recipe: ', z)
 
                 # Split on parenthesis and commas with no space after them
                 recipe = re.split(',\"|\",|,(?=\S)', line) # Use (?<=\S) before comma?
@@ -139,22 +141,42 @@ def GetNutrition(file):
                     try:
                         qty = float(INGREDIENT[0])
                     except:
-                        pass
+                        try:
+                            if '-' in INGREDIENT[0]:
+                                qty = float(INGREDIENT[0][0:INGREDIENT[0].find('-')])
+                        except:
+                            pass
+                        else:
+                            pass
 
 
                 # Check for common units of measurement (BBC format)
-                if "g/" in INGREDIENT[0] and 'kg/' not in INGREDIENT[0]:
-                    grams = float(INGREDIENT[0][0:INGREDIENT[0].find('g/')])
+                try:
+                    if "g/" in INGREDIENT[0] and 'kg/' not in INGREDIENT[0]:
+                        if '-' in INGREDIENT[0]:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('-')])
+                        else:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('g/')])
 
-                elif "kg/" in INGREDIENT[0]:
-                    grams = float(INGREDIENT[0][0:INGREDIENT[0].find('kg/')])/1000
+                    elif "kg/" in INGREDIENT[0]:
+                        if '-' in INGREDIENT[0]:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('-')])/1000
+                        else:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('kg/')])/1000
 
-                elif "l/" in INGREDIENT[0] and 'ml/' not in INGREDIENT[0]:
-                    grams = float(INGREDIENT[0][0:INGREDIENT[0].find('l/')])/1000
+                    elif "l/" in INGREDIENT[0] and 'ml/' not in INGREDIENT[0]:
+                        if '-' in INGREDIENT[0]:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('-')])/1000
+                        else:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('l/')])/1000
 
-                elif "ml/" in INGREDIENT[0]:
-                    grams = float(INGREDIENT[0][0:INGREDIENT[0].find('ml/')])
-
+                    elif "ml/" in INGREDIENT[0]:
+                        if '-' in INGREDIENT[0]:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('-')])
+                        else:
+                            grams = float(INGREDIENT[0][0:INGREDIENT[0].find('ml/')])
+                except:
+                    pass
 
                 # If quantity exists, convert to grams using measurement dict
                 if qty != None and grams == None:
@@ -402,21 +424,29 @@ def GetNutrition(file):
                                     [NutrDict['vitA']] + [NutrDict['vitC']] +
                                     [NutrDict['calcium']] + [NutrDict['iron']])
 
+                        # Add data to dataframe
                         ingredients_df.loc[len(ingredients_df)] = nutr_data
+
+                        # If raw data are huge, you can save each line to a txt/csv to store
+                        (ingredients_df.iloc[[len(ingredients_df)-1]]
+                            .to_csv('get_nutrition_FULL.txt',
+                            index=False, header=False, mode='a'))
+
 
             # Iteration control to select small subset
             z += 1
-            print('Getting nutrition for recipe: ', z)
-            if z == 20:
+            if z == 3:
                 break
+
 
     return ingredients_df
 
+
 # Running main code and storing in .csv, .txt, and .pkl
 ingredients_df = GetNutrition("recipe_output_new.csv")
-ingredients_df.to_csv('get_nutrition_01.csv', index=False)
-ingredients_df.to_csv('get_nutrition_01.txt', index=False)
-ingredients_df.to_pickle('get_nutrition_01.pkl')
+# ingredients_df.to_csv('get_nutrition_FULL.csv', index=False)
+# ingredients_df.to_csv('get_nutrition_FULL.txt', index=False)
+# ingredients_df.to_pickle('get_nutrition_FULL.pkl')
 
 
 ### NOTES ###
