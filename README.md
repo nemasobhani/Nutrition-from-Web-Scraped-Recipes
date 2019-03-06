@@ -44,4 +44,10 @@ Data Transformation, Feature Engineering Complete | Feb 26th
 Statistical Summary and Visualization Complete |  Mar 8th  
 
 ## 4. Current Micro Next Steps
-Altering ingredient outliers
+- Altering ingredient outliers  
+- Break up code  
+    - Independent functions  
+- Analysis approach  
+- Visualization  
+- Write-up  
+- Jupyter Notebook  
