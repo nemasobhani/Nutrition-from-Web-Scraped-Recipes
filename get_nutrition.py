@@ -68,7 +68,7 @@ def GetNutrition(file):
             # Error handling for UnicodeDecodeError and IndexError
             try:
 
-                # print(line)
+                # Helpful print statements
                 print('Getting nutrition for recipe: ', z)
 
                 # Split on parenthesis and commas with no space after them
