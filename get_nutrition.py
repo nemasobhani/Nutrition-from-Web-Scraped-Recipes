@@ -435,7 +435,7 @@ def GetNutrition(file):
 
             # Iteration control to select small subset
             z += 1
-            if z == 3:
+            if z == 10001:
                 break
 
 
