@@ -44,10 +44,33 @@ Data Transformation, Feature Engineering Complete | Feb 26th
 Statistical Summary and Visualization Complete |  Mar 8th  
 
 ## 4. Current Micro Next Steps
-- Altering ingredient outliers  
-- Break up code  
-    - Independent functions  
 - Analysis approach  
 - Visualization  
 - Write-up  
 - Jupyter Notebook  
+
+- Generate Questions
+    - Naomi 
+        - Word Cloud and Frequencies
+    - Nema 
+        - Drop outliers (start high)
+        - Standard Numeric Analysis (Max/Min/Mean/Median/Mode)
+    - Fun 
+        - TBD
+    
+- Paper
+        - Methods
+            - Code efficiency
+        - Numeric Summaries
+        - Visualization Summaries
+        - Troubleshooting / Optimization / Assumptions
+        - Discussion
+            - Accuracy
+            - What we learned
+            - Moving forward
+
+Timeline (do by):
+Monday, 3/11 - Raw Data Analysis Finished and meet up at 1:30pm (DISTILLATION SESSION) Assign Paper
+Tuesday, 3/12 - <After class> Presentation Outline!
+
+
