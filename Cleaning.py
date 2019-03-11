@@ -21,6 +21,8 @@
 #awk -F',' '$1~/joyofkosher/' recipe_output_wo_longjoy.csv> didiwork.csv
 #awk -F"," '$1 != "http://www.joyofkosher.com/recipes/fresh-tuna-nicoise-salad/" {print $0 }' 'recipe_temp.csv' > 'recipe_output_new.csv'
 #awk -F"," '$1 == "http://foodnetwork.com/recipes/rebuilt-louisiana-seafood-platter-recipe3-1965535" {print $0 }' 'recipe_output_new.csv' > 'recipe_temp.csv'
+#Print lines with only two fields and the line immediately following
+#awk -F, 'NF==2 {print; nr[NR+1];next}; NR in nr' recipe_output.csv > test.csv
 
 import pandas as pd
 import re
@@ -37,10 +39,10 @@ df = pd.read_csv('recipe_output_new.csv', names = range(80), sep = ",", quotecha
 #     mask = (df[i].str.contains(r"\(([^\)]+)\),")==True)#then change , to "
 #     df.loc[mask,i].to_csv(path_or_buf = f'parenthesis{i}.csv')
     #cat parenthesis3.csv parenthesis4.csv parenthesis5.csv parenthesis6.csv parenthesis7.csv parenthesis8.csv parenthesis9.csv parenthesis10.csv parenthesis11.csv parenthesis12.csv parenthesis13.csv parenthesis14.csv parenthesis15.csv parenthesis16.csv parenthesis17.csv parenthesis18.csv parenthesis19.csv parenthesis20.csv parenthesis21.csv parenthesis22.csv parenthesis23.csv parenthesis24.csv parenthesis25.csv parenthesis26.csv parenthesis27.csv parenthesis28.csv parenthesis29.csv parenthesis30.csv parenthesis31.csv parenthesis32.csv parenthesis33.csv parenthesis34.csv parenthesis35.csv parenthesis36.csv parenthesis37.csv parenthesis38.csv parenthesis39.csv parenthesis40.csv parenthesis41.csv parenthesis42.csv parenthesis43.csv parenthesis44.csv parenthesis45.csv parenthesis46.csv parenthesis47.csv > parenthesis.csv
-for i in range(2,80):
-    df.loc[:,i] = df.loc[:,i].str.replace(pat=r"\([^\)]+\)", repl=',', n=-1, case=None, flags=re.IGNORECASE, regex=True)
-    # print(df.loc[i])
-df.to_csv(path_or_buf = f'recipe_noparens.csv', header = False, index = False)
+# for i in range(2,80):
+#     df.loc[:,i] = df.loc[:,i].str.replace(pat=r"\([^\)]+\)", repl=',', n=-1, case=None, flags=re.IGNORECASE, regex=True)
+#     # print(df.loc[i])
+# df.to_csv(path_or_buf = f'recipe_noparens.csv', header = False, index = False)
 # for i in range(2,80):
 #     df[df[i].str.contains("Instructions")==True].to_csv(path_or_buf = f'instruct{i}.csv')
 
@@ -49,9 +51,9 @@ def dupes():
     '''Remove duplicate rows'''
     dupes = df[df.duplicated()]
     print(len(dupes))#4866
-    dupes.to_csv(path_or_buf = f'recipe_dupes.csv')#, header = False
-    dupes = df.drop_duplicates()
-    dupes.to_csv(path_or_buf = f'recipe_temp_temp.csv', header = False)#, index = False)
+    dupes.to_csv(path_or_buf = f'recipe_dupes2.csv')#, header = False
+    dupes = df.drop_duplicates(keep='last')
+    dupes.to_csv(path_or_buf = f'recipe_temp.csv', header = False)#, index = False)
     #Remove the first row(weird column names), Put our header back on top, Remove the first column
     # awk 'NR>1 {print$0}' recipe_temp.csv>recipe_output_new.csv
     # cat header.csv recipe_temp.csv >recipe_output_new.csv
@@ -113,5 +115,5 @@ def freq():
         if int(wc_sorted[i][1]) > 1000:
             wc_sorted2.append(wc_sorted[i])
     print(wc_sorted2)
-# dupes() #remove duplicate rows
+dupes() #resmove duplicate rows
 # repeat_ingredients() #remove repeated ingredients
