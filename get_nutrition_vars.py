@@ -153,10 +153,10 @@ column_names = ["Recipe",
                 "Dietary Fiber (g)",
                 "Sugars (g)",
                 "Protein (g)",
-                "Vitamin A (% DV)",
-                "Vitamin C (% DV)",
-                "Calcium (% DV)",
-                "Iron (% DV)"]
+                "Vitamin A (IU)",
+                "Vitamin C (mg)",
+                "Calcium (mg)",
+                "Iron (mg)"]
 
 
 ### NOTES ###

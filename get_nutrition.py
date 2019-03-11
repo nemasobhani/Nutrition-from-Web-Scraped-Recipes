@@ -24,10 +24,10 @@ Desired information:
     Dietary Fiber (g)
     Sugars (g)
     Protein (g)
-    Vitamin A (% DV)
-    Vitamin C (% DV)
-    Calcium (% DV)
-    Iron (% DV)
+    Vitamin A (IU)
+    Vitamin C (mg)
+    Calcium (mg)
+    Iron (mg)
 
 ***All nutrition organized following fda.gov nutritional facts guidelines***
 
@@ -59,9 +59,9 @@ def GetNutrition(file):
     with open(file, encoding='utf-8') as f:
 
         # I'm using this to skip title index
-        for skip in range(20001):
+        for skip in range(1):
             next(f)
-        z = 20001
+        z = 1
 
 
         for line in f:
@@ -429,13 +429,13 @@ def GetNutrition(file):
 
                         # If raw data are huge, you can save each line to a txt/csv to store
                         (ingredients_df.iloc[[len(ingredients_df)-1]]
-                            .to_csv('get_nutrition_FULL100k.txt',
+                            .to_csv('get_nutrition_FULL.txt',
                             index=False, header=False, mode='a'))
 
 
             # Iteration control to select small subset
             z += 1
-            if z == 100001:
+            if z == 10001:
                 break
 
 
