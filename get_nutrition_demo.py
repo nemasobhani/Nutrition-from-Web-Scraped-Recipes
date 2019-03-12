@@ -252,7 +252,7 @@ def GetNutrition(file):
 
                 BestMatch = [0, float('inf'), None, FoodGroup]
 
-                with open('USDA_Nutrition_DataSet/FOOD_DES.txt') as g:
+                with open('FOOD_DES.txt') as g:
                     for line in g:
                         USDA_desc = line.lower().split('~^~')
 
@@ -373,7 +373,7 @@ def GetNutrition(file):
                         factor = grams / 100
 
                     # Using food_ID get nutrition data from USDA file (NUT_DATA)
-                    with open('USDA_Nutrition_DataSet/NUT_DATA.txt') as g:
+                    with open('NUT_DATA.txt') as g:
 
                         # Initialize dictionary to track nutrients
                         NutrDict = ({'protein':None, 'fat':None, 'carb':None,
