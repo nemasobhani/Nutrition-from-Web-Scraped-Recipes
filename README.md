@@ -40,5 +40,11 @@ Topic|Due Date
 ---|---
 Data Collection Complete | Feb 1st   
 Data Cleanup Complete | Feb 15th  
-Data Transformation, Feature Engineering Complete | Feb 26th
-Statistical Summary and Visualization Complete |  Mar 8th  
+
+## 4. Implementation
+
+- Start with scraped nutrition data as outline by Naomi Goodnight.
+- Run get_nutrition.py
+  - Use file containing scraped data
+  - Name output file
+- Feel free to use our analysis with your data
