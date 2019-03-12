@@ -59,8 +59,8 @@ def GetNutrition(file):
     with open(file, encoding='utf-8') as f:
 
         # I'm using this to skip title index
-        for skip in range(4000):
-            next(f)
+        # for skip in range(1):
+        #     next(f)
         z = 0
 
 
@@ -444,7 +444,7 @@ def GetNutrition(file):
 
 
 # Running main code and storing in .csv, .txt, and .pkl
-# ingredients_df = GetNutrition("recipe_output_new.csv")
+# ingredients_df = GetNutrition("recipe_output_demo.csv")
 # ingredients_df.to_csv('get_nutrition_FULL.csv', index=False)
 # ingredients_df.to_csv('get_nutrition_FULL.txt', index=False)
 # ingredients_df.to_pickle('get_nutrition_FULL.pkl')
