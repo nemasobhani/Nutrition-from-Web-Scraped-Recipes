@@ -18,15 +18,24 @@ import nltk
 import regex as re
 from collections import Counter
 
-#So I can see multiple outputs
-from IPython.core.interactiveshell import InteractiveShell
-InteractiveShell.ast_node_interactivity = "all"
+# #So I can see multiple outputs
+from IPython.display import display, HTML
+CSS = """
+div.cell:nth-child(40) .output {
+    flex-direction: row;
+}
+"""
+HTML('<style>{}</style>'.format(CSS))
 
 #Load the extra clean data
 df = pd.read_csv('recipe_overclean.csv', sep = ",", quotechar = '"', dtype=object, index_col=0)
 df["TotalIng"] = pd.to_numeric(df["TotalIng"])#This actually is num of nan
 
 # Copy dataframe and group by recipe
+NumRecipes = len(df)
+NumIngr = sum(76 - df.TotalIng)
+df_high_level = pd.Series([NumRecipes,NumIngr], ['NumRecipes','NumIngr'])
+
 #View some summary data by website
 agg1 = df.groupby("Website").size()
 agg2 = 76 - df.groupby('Website')[["TotalIng"]].mean() #To convert to not nan
@@ -46,9 +55,8 @@ wordfreq_AggIng = wordfreq_AggIng[4:]
 # Create stopword list:
 stopwords = set(STOPWORDS)
 stop1 = ['a', 'and', 'the', 'or', 'of', 'if', 'on', 'but','with','®',
-        'pinch', 'left', 'peeled', 'cut', 'chopped', 'sliced','&',
-        'small', 'medium', 'large', 'whole', 'into', 'in', 'to',
-        'plus', 'more', 'thick', 'halved', 'quartered', 'good',
+        'pinch', 'left', '&', 'small', 'medium', 'large', 'whole', 'into', 'in',
+        'to','plus', 'more', 'thick', 'halved', 'quartered', 'good',
         'inch', 'inches', 'about', 'sea', 'end', 'approximate',
         'approximately', 'very', 'finely', 'for', 'nan', 'none',
          'recipe', 'freshly','ground']
@@ -64,53 +72,46 @@ measurement = ['teaspoon', 'tsp', 'tablespoon', 'tbsp','sprigs','sprig',
                 'milliliters', 'liters']
 amounts = ["1", "one", "2", "two", "3", 'three','4','four',
            '5','five','6','six','7','seven','8','eight','9',
-           'nine','10','ten','½', '1/2','half', '1½','¼','1/4','3/4','⅓','1/3','¾','1-½','12']
+           'nine','10','ten','½', '1/2','half', '1½','¼','1/4',
+           '3/4','⅓','1/3','¾','1-½','12']
 stopwords.update(stop1,measurement,amounts)
 
 #Remove adj and verbs
 stopwordsExtra = stopwords.copy()
-stopwordsExtra.update(['fresh','black','red','powder','minced','white',
-                       'grated','kosher','unsalted','leaves','sauce','baking',
-                      'dried','diced','thinly','extract','divided','brown','pieces',
-                      'green','taste','slices','seeds','dry','room','temperature',
-                      'all-purpose','shredded','crushed','drained','coarsely',
-                      'heavy','frozen','granulated','melted','softened','trimmed',
-                       'toasted','yellow','removed','cubes','cooked','light','seeded','powdered'])
+stopwordsExtra.update(['peeled', 'cut', 'chopped', 'sliced','fresh','black',
+                        'red','powder','minced','white','grated','kosher',
+                        'unsalted','leaves','sauce','baking','dried','diced',
+                        'thinly','extract','divided','brown','pieces','green',
+                        'taste','slices','seeds','dry','room','temperature',
+                        'all-purpose','shredded','crushed','drained','coarsely',
+                        'heavy','frozen','granulated','melted','softened',
+                        'trimmed','toasted','yellow','removed','cubes','cooked',
+                        'light','seeded','powdered'])
 
 
 wb_topsum = website.sort_values(by='NumRecipes',ascending=False).head(20)
 wb_topave = website.sort_values(by='AveNumIngr',ascending=False).head(20)
 
-wordfreq_Title_top = wordfreq_Title.sort_values(ascending=False).head(50)
-wordfreq_Ing_top = wordfreq_AggIng.sort_values(ascending=False).head(50)
+wordfreq_Title = wordfreq_Title.sort_values(ascending=False).head(50)
+wordfreq_Ing = wordfreq_AggIng.sort_values(ascending=False).head(50)
 
 wordfreq_AggIng_wo_stop = wordfreq_AggIng[~wordfreq_AggIng.index.isin(stopwords)]
-wordfreq_Title_wo_stop = wordfreq_Title[~wordfreq_Title.index.isin(stopwords)]
+wordfreq_AggIng_wo_stop = wordfreq_AggIng_wo_stop.sort_values(ascending=False).head(50)
 
-wordfreq_AggIng_top_wo_stop = wordfreq_AggIng_wo_stop.sort_values(ascending=False).head(50)
-wordfreq_Title_top_wo_stop = wordfreq_Title_wo_stop.sort_values(ascending=False).head(50)
+wordfreq_Title_wo_stop = wordfreq_Title[~wordfreq_Title.index.isin(stopwords)]
+wordfreq_Title_wo_stop = wordfreq_Title_wo_stop.sort_values(ascending=False).head(50)
 
 wordfreq_AggIng_wo_extra = wordfreq_AggIng[~wordfreq_AggIng.index.isin(stopwordsExtra)]
-wordfreq_AggIng_top_wo_extra = wordfreq_AggIng.sort_values(ascending=False).head(50)
+wordfreq_AggIng_wo_extra = wordfreq_AggIng_wo_extra.sort_values(ascending=False).head(50)
+
+wordfreq_Ing_prop = wordfreq_AggIng_wo_extra/len(df)
 
 
-if analysis:
-    wb_topsum
-    wb_topave
-    wordfreq_Title_top
-    wordfreq_Ing_top
-    wordfreq_AggIng_top_wo_stop
-    wordfreq_Title_top_wo_stop
-    wordfreq_AggIng_top_wo_extra
-# Visualization on each nutrient column
-if plot:
-    sns.catplot(x=col_name, data=col_df, kind='boxen')
-    plt.xlim(0, col_ser.max())
 
-
-def wc(site,section, pic=None):
+def wc(site,section=[], pic=None):
     # Generate a word cloud image
-    wordcloud = WordCloud(stopwords=stopwords, background_color="white",mask=pic).generate(ingredients.loc[site,section])
+    wordcloud = WordCloud(stopwords=stopwords,
+                          mask=pic, regexp = r"\w[\w'-]+").generate(ingredients.loc[site,section])
     # Display the generated image:
     # the matplotlib way:
     plt.imshow(wordcloud, interpolation='bilinear')
