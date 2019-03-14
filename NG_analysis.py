@@ -19,8 +19,13 @@ import regex as re
 from collections import Counter
 
 # #So I can see multiple outputs
-# from IPython.core.interactiveshell import InteractiveShell
-# InteractiveShell.ast_node_interactivity = "all"
+from IPython.display import display, HTML
+CSS = """
+div.cell:nth-child(40) .output {
+    flex-direction: row;
+}
+"""
+HTML('<style>{}</style>'.format(CSS))
 
 #Load the extra clean data
 df = pd.read_csv('recipe_overclean.csv', sep = ",", quotechar = '"', dtype=object, index_col=0)
@@ -101,23 +106,12 @@ wordfreq_AggIng_wo_extra = wordfreq_AggIng_wo_extra.sort_values(ascending=False)
 
 wordfreq_Ing_prop = wordfreq_AggIng_wo_extra/len(df)
 
-# if analysis:
-wb_topsum
-wb_topave
-wordfreq_Title_top
-wordfreq_Ing_top
-wordfreq_AggIng_top_wo_stop
-wordfreq_Title_top_wo_stop
-wordfreq_AggIng_top_wo_extra
-# Visualization on each nutrient column
-# if plot:
-# sns.catplot(x=col_name, data=col_df, kind='boxen')
-# plt.xlim(0, col_ser.max())
 
 
 def wc(site,section, pic=None):
     # Generate a word cloud image
-    wordcloud = WordCloud(stopwords=stopwords, background_color="white",mask=pic).generate(ingredients.loc[site,section])
+    wordcloud = WordCloud(stopwords=stopwords,
+                          mask=pic, regexp = r"\w[\w'-]+").generate(ingredients.loc[site,section])
     # Display the generated image:
     # the matplotlib way:
     plt.imshow(wordcloud, interpolation='bilinear')
