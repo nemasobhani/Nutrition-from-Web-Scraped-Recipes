@@ -111,7 +111,7 @@ def Factoids():
     # How many people would our recipes feed for a day
     ppl_feed = int(round(ingredients_df['Calories (kcal)'].sum() / 2000))
     ppl_feed_yrs = round(ppl_feed/365)
-    print('All of our scraped recicpes would feed', "{:,}".format(ppl_feed), 'people for 1 day (based on 2,000 Cal diet).')
+    print('All of our scraped recipes would feed', "{:,}".format(ppl_feed), 'people for 1 day (based on 2,000 Cal diet).')
     print('For one individual, that would take', ppl_feed_yrs, 'years to eat!\n')
 
     # How many days worth of protein is that for a bodybuilder? (200 g per day)
