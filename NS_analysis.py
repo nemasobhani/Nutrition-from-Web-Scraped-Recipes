@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from get_nutrition_vars import column_names
 sns.set(style="ticks", color_codes=True)
 
-ingredients_df = pd.read_csv('get_nutrition_FULL20k.txt', low_memory=False)
+ingredients_df = pd.read_csv('get_nutrition_FULL100k.txt', low_memory=False)
 ingredients_df.columns = column_names
 
 # Copy dataframe and group by recipe
