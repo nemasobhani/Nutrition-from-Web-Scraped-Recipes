@@ -108,7 +108,7 @@ wordfreq_Ing_prop = wordfreq_AggIng_wo_extra/len(df)
 
 
 
-def wc(site,section=[], pic=None):
+def wc(site,section, pic=None):
     # Generate a word cloud image
     wordcloud = WordCloud(stopwords=stopwords,
                           mask=pic, regexp = r"\w[\w'-]+").generate(ingredients.loc[site,section])
