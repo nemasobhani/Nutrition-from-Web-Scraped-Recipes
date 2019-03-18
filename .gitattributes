@@ -1,1 +1,0 @@
-get_nutrition_FULL100k.txt filter=lfs diff=lfs merge=lfs -text
