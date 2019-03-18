@@ -353,18 +353,18 @@ def GetNutrition(file):
 
                             else:
                                 continue
+                        # Print statement to see result of ingredient search
+                        print('\n','~^~^~^~^~^~^~^~^~^~  RESULT  ~^~^~^~^~^~^~^~^~^~^~',
+                                '\nscraped:   ', INGREDIENT,
+                                '\ntruncated: ', truncated,
+                                '\nUSDA_Desc: ', BestDesc,
+                                '\nbest match:', BestMatch,
+                                '\n\nqty:  ',qty,
+                                '\ngrams:',grams,
+                                '\n','~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~')
+
                     except:
                         continue
-                    # Print statement to see result of ingredient search
-                    print('\n','~^~^~^~^~^~^~^~^~^~  RESULT  ~^~^~^~^~^~^~^~^~^~^~',
-                            '\nscraped:   ', INGREDIENT,
-                            '\ntruncated: ', truncated,
-                            '\nUSDA_Desc: ', BestDesc,
-                            '\nbest match:', BestMatch,
-                            '\n\nqty:  ',qty,
-                            '\ngrams:',grams,
-                            '\n','~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~')
-
 
                     # Define multiplication factor based on qty, grams, and food group
                     if grams == None and qty == None:
@@ -420,7 +420,7 @@ def GetNutrition(file):
                                         NutrDict['satfat'] = float(USDA_nutr[2])*factor
                             except:
                                 continue
-                                
+
                         nutr_data = (recipe[:3] + [ingredient] +
                                     [NutrDict['cal']] + [NutrDict['fat']] +
                                     [NutrDict['satfat']] + [NutrDict['transfat']] +
