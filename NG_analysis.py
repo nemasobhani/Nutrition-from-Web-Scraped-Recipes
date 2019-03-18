@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from get_nutrition_vars import column_names
 sns.set(style="ticks", color_codes=True)
+import pickle
 
 from os import path
 from PIL import Image
@@ -47,10 +48,18 @@ website
 ingredients = pd.read_csv('ingredients_agg.csv', names = ['Title','AggIngredients'], sep = ",", quotechar = '"', skipinitialspace=True, error_bad_lines = False, dtype=object)
 
 #summary statistic,  word frequency
-wordfreq_Title = ingredients.Title.apply(lambda x: pd.value_counts(str(x).split(" "))).sum(axis = 0)
-wordfreq_Title = wordfreq_Title[3:]
+# wordfreq_Title = ingredients.Title.apply(lambda x: pd.value_counts(str(x).split(" "))).sum(axis = 0)
+# wordfreq_Title = wordfreq_Title[3:]
+
+pickle_off = open("wordfreq_Title.pickle","rb")
+wordfreq_Title = pickle.load(pickle_off)
+
 wordfreq_AggIng = ingredients.AggIngredients.apply(lambda x: pd.value_counts(str(x).split(" "))).sum(axis = 0)
 wordfreq_AggIng = wordfreq_AggIng[4:]
+
+pickle_off = open("wordfreq_AggIng.pickle","rb")
+wordfreq_AggIng = pickle.load(pickle_off)
+
 
 # Create stopword list:
 stopwords = set(STOPWORDS)
