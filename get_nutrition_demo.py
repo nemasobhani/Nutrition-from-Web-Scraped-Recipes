@@ -253,106 +253,108 @@ def GetNutrition(file):
                 BestMatch = [0, float('inf'), None, FoodGroup]
 
                 with open('FOOD_DES.txt') as g:
-                    for line in g:
-                        USDA_desc = line.lower().split('~^~')
+                    try:
+                        for line in g:
+                            USDA_desc = line.lower().split('~^~')
 
-                        # If food group identified, only search there
-                        if FoodGroup != None and USDA_desc[1] == FoodGroup:
+                            # If food group identified, only search there
+                            if FoodGroup != None and USDA_desc[1] == FoodGroup:
 
-                            CurrentMatch = [0, float('inf'), None, FoodGroup]
+                                CurrentMatch = [0, float('inf'), None, FoodGroup]
 
-                            # Check if words in ingredient are in USDA database
-                            for i in truncated:
+                                # Check if words in ingredient are in USDA database
+                                for i in truncated:
 
-                                # Remove last letter to deal with plurality
-                                i = i[:-1]
+                                    # Remove last letter to deal with plurality
+                                    i = i[:-1]
 
-                                # Hard coded exceptions. Pretty annoying...
-                                if 'canadian' in USDA_desc[2] and 'canadian' not in truncated:
-                                    continue
-                                if 'soy' in USDA_desc[2] and 'soy' not in truncated:
-                                    continue
-                                if 'tofu' in USDA_desc[2] and 'tofu' not in truncated:
-                                    continue
-                                if 'nog' in USDA_desc[2] and 'nog' not in truncated:
-                                    continue
-                                if 'yolk' in USDA_desc[2] and 'yolk' not in truncated:
-                                    continue
-                                if 'white' in USDA_desc[2] and 'white' not in truncated:
-                                    continue
-                                if 'dried' in USDA_desc[2] and 'dried' not in truncated:
-                                    continue
-                                if 'powder' in USDA_desc[2] and 'powder' not in truncated:
-                                    continue
-                                if i == 'cilantr' and 'coriander' in USDA_desc[2]:
-                                    CurrentMatch[0] += 2 # Cheating
-                                if 'tortilla' in i:
-                                    FoodGroup = '1800'
-                                if i in USDA_desc[2]:
-                                    CurrentMatch[0] += 1
+                                    # Hard coded exceptions. Pretty annoying...
+                                    if 'canadian' in USDA_desc[2] and 'canadian' not in truncated:
+                                        continue
+                                    if 'soy' in USDA_desc[2] and 'soy' not in truncated:
+                                        continue
+                                    if 'tofu' in USDA_desc[2] and 'tofu' not in truncated:
+                                        continue
+                                    if 'nog' in USDA_desc[2] and 'nog' not in truncated:
+                                        continue
+                                    if 'yolk' in USDA_desc[2] and 'yolk' not in truncated:
+                                        continue
+                                    if 'white' in USDA_desc[2] and 'white' not in truncated:
+                                        continue
+                                    if 'dried' in USDA_desc[2] and 'dried' not in truncated:
+                                        continue
+                                    if 'powder' in USDA_desc[2] and 'powder' not in truncated:
+                                        continue
+                                    if i == 'cilantr' and 'coriander' in USDA_desc[2]:
+                                        CurrentMatch[0] += 2 # Cheating
+                                    if 'tortilla' in i:
+                                        FoodGroup = '1800'
+                                    if i in USDA_desc[2]:
+                                        CurrentMatch[0] += 1
 
-                            # If count is >= best, add rest of information
-                            if CurrentMatch[0] >= BestMatch[0]:
-                                CurrentMatch[1] = len(USDA_desc[2])
-                                CurrentMatch[2] = USDA_desc[0][1:]
+                                # If count is >= best, add rest of information
+                                if CurrentMatch[0] >= BestMatch[0]:
+                                    CurrentMatch[1] = len(USDA_desc[2])
+                                    CurrentMatch[2] = USDA_desc[0][1:]
 
-                            # If count higher, take that one
-                            if CurrentMatch[0] > BestMatch[0]:
-                                BestMatch = CurrentMatch
+                                # If count higher, take that one
+                                if CurrentMatch[0] > BestMatch[0]:
+                                    BestMatch = CurrentMatch
 
-                            # If count is higher and ref length is shorter, update best
-                            if (CurrentMatch[0] >= 1 and
-                                CurrentMatch[0] >= BestMatch[0] and
-                                CurrentMatch[1] <= BestMatch[1]):
+                                # If count is higher and ref length is shorter, update best
+                                if (CurrentMatch[0] >= 1 and
+                                    CurrentMatch[0] >= BestMatch[0] and
+                                    CurrentMatch[1] <= BestMatch[1]):
 
-                                BestMatch = CurrentMatch
+                                    BestMatch = CurrentMatch
 
-                                # Print statement to see match
-                                BestDesc = USDA_desc[2].split(', ')
-                                print("\ntruncated: ", truncated,
-                                        "\nUSDA_Desc: ", BestDesc,
-                                        '\nbest match:', BestMatch, "\n###############")
+                                    # Print statement to see match
+                                    BestDesc = USDA_desc[2].split(', ')
+                                    print("\ntruncated: ", truncated,
+                                            "\nUSDA_Desc: ", BestDesc,
+                                            '\nbest match:', BestMatch, "\n###############")
 
-                        # Otherwise, check every USDA food description
-                        elif FoodGroup == None:
+                            # Otherwise, check every USDA food description
+                            elif FoodGroup == None:
 
-                            CurrentMatch = [0, float('inf'), None, FoodGroup]
+                                CurrentMatch = [0, float('inf'), None, FoodGroup]
 
-                            # Check if words in ingredient are in USDA database
-                            for i in truncated:
+                                # Check if words in ingredient are in USDA database
+                                for i in truncated:
 
-                                # Remove last letter to deal with plurality
-                                i = i[:-1]
+                                    # Remove last letter to deal with plurality
+                                    i = i[:-1]
 
-                                if i in USDA_desc[2]:
-                                    CurrentMatch[0] += 1
+                                    if i in USDA_desc[2]:
+                                        CurrentMatch[0] += 1
 
-                            # If count is >= best, add rest of information
-                            if CurrentMatch[0] >= BestMatch[0]:
-                                CurrentMatch[1] = len(USDA_desc[2])
-                                CurrentMatch[2] = USDA_desc[0][1:]
-                                CurrentMatch[3] = USDA_desc[1]
+                                # If count is >= best, add rest of information
+                                if CurrentMatch[0] >= BestMatch[0]:
+                                    CurrentMatch[1] = len(USDA_desc[2])
+                                    CurrentMatch[2] = USDA_desc[0][1:]
+                                    CurrentMatch[3] = USDA_desc[1]
 
-                            # If count higher, take that one
-                            if CurrentMatch[0] > BestMatch[0]:
-                                BestMatch = CurrentMatch
+                                # If count higher, take that one
+                                if CurrentMatch[0] > BestMatch[0]:
+                                    BestMatch = CurrentMatch
 
-                            # If count is higher and ref length is shorter, update best
-                            if (CurrentMatch[0] >= 1 and
-                                CurrentMatch[0] >= BestMatch[0] and
-                                CurrentMatch[1] <= BestMatch[1]):
+                                # If count is higher and ref length is shorter, update best
+                                if (CurrentMatch[0] >= 1 and
+                                    CurrentMatch[0] >= BestMatch[0] and
+                                    CurrentMatch[1] <= BestMatch[1]):
 
-                                BestMatch = CurrentMatch
+                                    BestMatch = CurrentMatch
 
-                                # Print statement to see match
-                                BestDesc = USDA_desc[2].split(', ')
-                                print("\ntruncated: ", truncated,
-                                        "\nUSDA_Desc: ", BestDesc,
-                                        '\nbest match:', BestMatch, "\n###############")
+                                    # Print statement to see match
+                                    BestDesc = USDA_desc[2].split(', ')
+                                    print("\ntruncated: ", truncated,
+                                            "\nUSDA_Desc: ", BestDesc,
+                                            '\nbest match:', BestMatch, "\n###############")
 
-                        else:
-                            continue
-
+                            else:
+                                continue
+                    except:
+                        continue
                     # Print statement to see result of ingredient search
                     print('\n','~^~^~^~^~^~^~^~^~^~  RESULT  ~^~^~^~^~^~^~^~^~^~^~',
                             '\nscraped:   ', INGREDIENT,
@@ -383,39 +385,42 @@ def GetNutrition(file):
                                     'transfat':None, 'satfat':None})
 
                         for line in g:
-                            if BestMatch[2] == line[1:6]: # Specific to avoid references
-                                USDA_nutr = line.split('^')[:3]
+                            try:
+                                if BestMatch[2] == line[1:6]: # Specific to avoid references
+                                    USDA_nutr = line.split('^')[:3]
 
-                                # Pull each nutrient amount into variable
-                                if USDA_nutr[1] == '~203~':
-                                    NutrDict['protein'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~204~':
-                                    NutrDict['fat'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~205~':
-                                    NutrDict['carb'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~208~':
-                                    NutrDict['cal'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~269~':
-                                    NutrDict['sugar'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~291~':
-                                    NutrDict['fiber'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~301~':
-                                    NutrDict['calcium'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~303~':
-                                    NutrDict['iron'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~307~':
-                                    NutrDict['sodium'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~318~':
-                                    NutrDict['vitA'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~401~':
-                                    NutrDict['vitC'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~601~':
-                                    NutrDict['cholest'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~605~':
-                                    NutrDict['transfat'] = float(USDA_nutr[2])*factor
-                                if USDA_nutr[1] == '~606~':
-                                    NutrDict['satfat'] = float(USDA_nutr[2])*factor
-
+                                    # Pull each nutrient amount into variable
+                                    if USDA_nutr[1] == '~203~':
+                                        NutrDict['protein'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~204~':
+                                        NutrDict['fat'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~205~':
+                                        NutrDict['carb'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~208~':
+                                        NutrDict['cal'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~269~':
+                                        NutrDict['sugar'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~291~':
+                                        NutrDict['fiber'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~301~':
+                                        NutrDict['calcium'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~303~':
+                                        NutrDict['iron'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~307~':
+                                        NutrDict['sodium'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~318~':
+                                        NutrDict['vitA'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~401~':
+                                        NutrDict['vitC'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~601~':
+                                        NutrDict['cholest'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~605~':
+                                        NutrDict['transfat'] = float(USDA_nutr[2])*factor
+                                    if USDA_nutr[1] == '~606~':
+                                        NutrDict['satfat'] = float(USDA_nutr[2])*factor
+                            except:
+                                continue
+                                
                         nutr_data = (recipe[:3] + [ingredient] +
                                     [NutrDict['cal']] + [NutrDict['fat']] +
                                     [NutrDict['satfat']] + [NutrDict['transfat']] +
